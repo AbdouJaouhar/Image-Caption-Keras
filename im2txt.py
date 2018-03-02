@@ -210,7 +210,7 @@ class Im2Txt():
 		for i in range(self.max_length):
 			sequence = self.tokenizer.texts_to_sequences([in_text])[0]
 			sequence = pad_sequences([sequence], maxlen=self.max_length)
-			yhat = self.model.predict([photo,sequence], verbose=0)
+			yhat = self.model.predict([self.extract_features(photo),sequence], verbose=0)
 			yhat = argmax(yhat)
 			word = self.word_for_id(yhat)
 
