@@ -24,10 +24,9 @@ from os import listdir
 from nltk.translate.bleu_score import corpus_bleu
 
 class Im2Txt():
-	"""docstring for Im2Txt"""
 
 	def __init__(self):
-		self.directory = '../Flicker8k_Dataset'
+		self.directory = 'Flicker8k_Dataset'
 		self.descriptions_file = 'descriptions.txt'
 
 		self.tokenizer = Tokenizer()
@@ -44,37 +43,6 @@ class Im2Txt():
 	    x -= 0.5
 	    x *= 2.
 	    return x
-
-	def GetIm2TxtModelv2(self):
-		img_input = Input(shape=(100,100,3))
-		x = Conv2D(32, (3, 3),name='conv3x3_64_1',padding='same',activation='relu')(img_input)
-		x = Conv2D(32, (3, 3),name='conv3x3_64_2',padding='same',activation='relu')(x)
-
-		x = MaxPooling2D(name='pool_1',pool_size=(2, 2),strides=(2, 2),padding='same')(x)
-
-		x = Conv2D(64, (3, 3),name='conv3x3_128_1',padding='same',activation='relu')(x)
-		x = Conv2D(64, (3, 3),name='conv3x3_128_2',padding='same',activation='relu')(x)
-
-		x = MaxPooling2D(name='pool_2',pool_size=(2, 2),strides=(2, 2),padding='same', )(x)
-
-
-		x = Flatten(name='flatten')(x)
-		x = Dense(4096, activation='relu', name='full_connected_1')(x)
-
-		fe1 = Dropout(0.5)(x)
-		fe2 = Dense(256, activation='relu')(fe1)
-		# sequence model
-		inputs2 = Input(shape=(self.max_length,))
-		se1 = Embedding(self.vocab_size, 256, mask_zero=True)(inputs2)
-		se2 = Dropout(0.5)(se1)
-		se3 = LSTM(256)(se2)
-		# decoder model
-		decoder1 = add([fe2, se3])
-		decoder2 = Dense(256, activation='relu')(decoder1)
-		outputs = Dense(self.vocab_size, activation='softmax')(decoder2)
-		# tie it together [image, seq] [word]
-		self.model = Model(inputs=[img_input, inputs2], outputs=outputs)
-		self.model.compile(loss='categorical_crossentropy', optimizer='adam')
 
 	def GetIm2TxtModel(self):
 
