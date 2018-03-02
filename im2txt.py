@@ -1,16 +1,13 @@
 from keras.layers import Conv2D,merge,Input, Dropout, Dense, LSTM, RepeatVector, Embedding, Dropout, merge, Activation,Convolution2D, MaxPooling2D, GRU,TimeDistributed, Merge
-from keras.optimizers import Adam
 from keras.models import Sequential
 from keras.layers.core import Flatten
 from keras.layers.wrappers import Bidirectional, TimeDistributed
-from keras.layers.merge import Add,add
 from keras.models import Model
-from keras.applications.vgg16 import VGG16 
 from keras.utils import to_categorical
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
 from keras.preprocessing.image import load_img
-from keras.optimizers import Adam, RMSprop
+from keras.optimizers import RMSprop
 from keras.callbacks import EarlyStopping
 from numpy import array
 from keras.preprocessing.image import img_to_array
@@ -18,8 +15,7 @@ from keras.applications.vgg16 import preprocess_input
 from keras.layers.recurrent import LSTM, GRU
 from keras.callbacks import TensorBoard, ModelCheckpoint
 from keras.layers.wrappers import Bidirectional
-from keras.regularizers import l2
-import json
+
 from attention import AttentionDecoder
 from numpy import argmax
 
