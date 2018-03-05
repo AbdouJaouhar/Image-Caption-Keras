@@ -190,6 +190,4 @@ class Im2Txt():
 			if word == '<end>':
 				in_text += '<end>'
 				break
-
-		print(in_text,len(in_text.split()))
 		return in_text
