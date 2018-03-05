@@ -99,9 +99,9 @@ class Im2Txt():
 				description = self.descriptions[image_id]
 
 				in_img, in_seq, out_word = self.CreateSequences(description, image)
-				if i<10:
-					print(out_word)
-					i+=1
+				#if i<10:
+					#print(out_word)
+					#i+=1
 				yield [[in_img, in_seq], out_word]
 			
 	def GetDescriptions(self):
@@ -155,7 +155,7 @@ class Im2Txt():
 		self.model.fit_generator(self.GetData(), steps_per_epoch=50, callbacks=callbacks_list, epochs=20)
 		self.model.save_weights('Im2Txt.h5')
 
-	def extract_features(self,filename):
+	def GetFeatures(self,filename):
 
 		image = load_img(filename, target_size=(100,100))
 		image = img_to_array(image)
@@ -165,22 +165,22 @@ class Im2Txt():
 		return image
 
 
-	def word_for_id(self,integer):
+	def GetWord(self,integer):
 		for word, index in self.tokenizer.word_index.items():
 			if index == integer:
 				return word
 
 		return None
 	 
-	def GenDescription(self,photo):
+	def GetDescription(self,photo):
 		in_text = '<start>'
 
 		for i in range(self.max_length):
 			sequence = self.tokenizer.texts_to_sequences([in_text])[0]
 			sequence = pad_sequences([sequence], maxlen=self.max_length)
-			yhat = self.model.predict([self.extract_features(photo),sequence], verbose=0)
+			yhat = self.model.predict([self.GetFeatures(photo),sequence], verbose=0)
 			yhat = argmax(yhat)
-			word = self.word_for_id(yhat)
+			word = self.GetWord(yhat)
 
 			if word is None:
 				in_text += '<end>'
