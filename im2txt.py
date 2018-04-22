@@ -111,7 +111,7 @@ class Im2Txt():
 		file.close()
 
 		for line in doc.split('\n')[:-1]:
-			line = ''+line+''
+			line = '<start> '+line+' <end>'
 			tokens = line.split()
 			image_id, image_desc = tokens[0], tokens[1:]
 			image_id = image_id.split('.')[0]
@@ -178,9 +178,9 @@ class Im2Txt():
 		for i in range(self.max_length):
 			sequence = self.tokenizer.texts_to_sequences([in_text])[0]
 			sequence = pad_sequences([sequence], maxlen=self.max_length)
-			yhat = self.model.predict([self.GetFeatures(photo),sequence], verbose=0)
-			yhat = argmax(yhat)
-			word = self.GetWord(yhat)
+			word_predict = self.model.predict([self.GetFeatures(photo),sequence], verbose=0)
+			word_index = argmax(word_predict)
+			word = self.GetWord(word_index)
 
 			if word is None:
 				in_text += '<end>'
