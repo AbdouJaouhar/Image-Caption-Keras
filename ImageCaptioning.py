@@ -1,6 +1,5 @@
 import numpy as np 
 from keras.applications.vgg16 import VGG16
-import time
 from keras.models import Model
 from keras.preprocessing.image import img_to_array
 from keras.preprocessing.image import load_img
@@ -8,12 +7,11 @@ from keras.applications.vgg16 import preprocess_input
 from os import listdir
 from keras.layers import Input, add
 from keras.layers import Dense, Concatenate
-from keras.layers import LSTM, Bidirectional, GRU
+from keras.layers import Bidirectional, GRU
 from keras.layers import Embedding
 from keras.layers import Dropout
 from Attention import Attention
-from keras.models import Sequential
-from keras.optimizers import Adam, SGD
+from keras.optimizers import Adam
 from keras.preprocessing.sequence import pad_sequences
 from keras.utils import to_categorical
 
