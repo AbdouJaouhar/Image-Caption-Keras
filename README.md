@@ -1,1 +1,1 @@
-# Image-Caption-Keras
+# Image Captioning with Attention - Keras
