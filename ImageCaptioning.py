@@ -1,5 +1,6 @@
 import numpy as np 
 from keras.applications.vgg16 import VGG16
+import time
 from keras.models import Model
 from keras.preprocessing.image import img_to_array
 from keras.preprocessing.image import load_img
@@ -7,10 +8,11 @@ from keras.applications.vgg16 import preprocess_input
 from os import listdir
 from keras.layers import Input, add
 from keras.layers import Dense, Concatenate
-from keras.layers import Bidirectional, GRU
+from keras.layers import LSTM, Bidirectional, GRU
 from keras.layers import Embedding
 from keras.layers import Dropout
 from Attention import Attention
+
 from keras.optimizers import Adam
 from keras.preprocessing.sequence import pad_sequences
 from keras.utils import to_categorical
@@ -25,7 +27,7 @@ class ImageCaptioning():
 		self.TestFeatures = FlickrDatas['TestFeatures']
 		self.TrainFeatures = FlickrDatas['TrainFeatures']
 		self.FileTokenizer = FlickrDatas['FileTokenizer']
-		self.model = Sequential()
+		self.model = None
 
 
 	def build(self):
@@ -90,13 +92,10 @@ class ImageCaptioning():
 
 		return feature
 
-	def GetGenerateDescription(self,photo):
-		def IndexToWord(index):
-			for word, index in self.FileTokenizer.word_index.items():
-				if index == integer:
-					return word
-			return None
+	def LoadModel(self,model):
+		self.model.load_weights(model)
 
+	def GetGenerateDescription(self,photo):
 		photo = self.GetFeatures(photo)
 
 		description = '<start>'
@@ -104,11 +103,13 @@ class ImageCaptioning():
 			sequence = self.FileTokenizer.texts_to_sequences([description])[0]
 			sequence = pad_sequences([sequence], maxlen=self.max_length)
 			yhat = self.model.predict([photo,sequence], verbose=0)
-			yhat = argmax(yhat)
-			word = IndexToWord(yhat)
-			if word is None:
+			yhat = np.argmax(yhat)
+			word = [x for x,y in list(self.FileTokenizer.word_index.items()) if y == yhat]
+			if word is []:
 				break
-			description += ' ' + word
+			description += ' ' + word[0]
 			if word == '<end>':
 				break
+		print("\n",)
+		print(description)
 		return description
