@@ -10,4 +10,9 @@ FlickrDatas = Flickr8k(flickr_options)
 
 ImageCaptioning = ImageCaptioning(FlickrDatas)
 ImageCaptioning.build()
-ImageCaptioning.train(20)
+# ImageCaptioning.train(30)
+ImageCaptioning.LoadModel('model_29.h5')
+
+description = ImageCaptioning.GetGenerateDescription('Flicker8k_Dataset/237547381_aa17c805e0.jpg')
+
+print("Description generated : ", description)
