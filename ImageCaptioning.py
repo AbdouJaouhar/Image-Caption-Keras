@@ -101,7 +101,7 @@ class ImageCaptioning():
 
 		description = '<start>'
 		for i in range(self.max_length):
-			sequence = tokenizer.texts_to_sequences([description])[0]
+			sequence = self.FileTokenizer.texts_to_sequences([description])[0]
 			sequence = pad_sequences([sequence], maxlen=self.max_length)
 			yhat = self.model.predict([photo,sequence], verbose=0)
 			yhat = argmax(yhat)
