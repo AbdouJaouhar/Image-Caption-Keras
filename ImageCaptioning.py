@@ -92,8 +92,8 @@ class ImageCaptioning():
 
 		return feature
 
-	def LoadModel(self,model):
-		self.model.load_weights(model)
+	def LoadModel(self,model_weights):
+		self.model.load_weights(model_weights)
 
 	def GetGenerateDescription(self,photo):
 		photo = self.GetFeatures(photo)
