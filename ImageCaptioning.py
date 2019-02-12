@@ -61,11 +61,11 @@ class ImageCaptioning():
 	def Generator(self):
 		while True:
 			for i in range(len(self.TrainDatas)):
-				image_feature = self.TrainFeatures[self.TrainDatas['image_id'][i]][0]
-				image_description = self.TrainDatas['description'][i]
+				ImageFeature = self.TrainFeatures[self.TrainDatas['image_id'][i]][0]
+				ImageDescription = self.TrainDatas['description'][i]
 
-				in_img ,in_seq ,out_word = self.GetSequences(image_feature, image_description)
-				yield [[in_img, in_seq], out_word]
+				FeedImage ,FeedSequence , NextWord = self.GetSequences(ImageFeature, ImageDescription)
+				yield [[FeedImage, FeedSequence], NextWord]
 
 	def GetSequences(self, image_feature, image_description):
 		Images, InputDescriptions, OutputWords = list(), list(), list()
@@ -96,19 +96,19 @@ class ImageCaptioning():
 		self.model.load_weights(model_weights)
 
 	def GetGenerateDescription(self,photo):
-		photo = self.GetFeatures(photo)
+		Photo = self.GetFeatures(photo)
 
 		description = '<start>'
 		for i in range(self.max_length):
-			sequence = self.FileTokenizer.texts_to_sequences([description])[0]
-			sequence = pad_sequences([sequence], maxlen=self.max_length)
-			yhat = self.model.predict([photo,sequence], verbose=0)
-			yhat = np.argmax(yhat)
-			word = [x for x,y in list(self.FileTokenizer.word_index.items()) if y == yhat]
+			Sequence = self.FileTokenizer.texts_to_sequences([description])[0]
+			Sequence = pad_sequences([sequence], maxlen=self.max_length)
+			ModelTemporaryResult = self.model.predict([Photo,Sequence], verbose=0)
+			HighProbabilityWordIndex = np.argmax(ModelTemporaryResult)
+			word = [w for w,index in list(self.FileTokenizer.word_index.items()) if index == HighProbabilityWordIndex]
 			if word is []:
 				break
 			description += ' ' + word[0]
-			if word == '<end>':
+			if word == ['<end>']:
 				break
 		print("\n",)
 		print(description)
