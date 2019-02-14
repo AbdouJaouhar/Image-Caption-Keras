@@ -1,4 +1,7 @@
+'''
+Code from  : https://www.kaggle.com/qqgeogor/keras-lstm-attention-glove840b-lb-0-043
 
+'''
 
 from keras import backend as K
 from keras.engine.topology import Layer
